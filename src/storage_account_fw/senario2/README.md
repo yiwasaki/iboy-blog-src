@@ -59,5 +59,4 @@ chmod +x storage-update.sh
 
 - このシナリオは検証目的のみで使用してください
 - デプロイされたリソースは検証後に削除することを推奨します
-- パスワードは強力なものを指定してください</content>
-<parameter name="filePath">d:\repos\blog-src\src\storage_account_fw\senario1\README.md
+- パスワードは強力なものを指定してください
