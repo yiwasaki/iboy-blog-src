@@ -31,10 +31,16 @@
 
 ```bash
 SOURCE_IP=$(curl -s ipinfo.io/ip)
+# Validate that SOURCE_IP is a well-formed IPv4 address
+if ! printf '%s\n' "$SOURCE_IP" | grep -Eq '^[0-9]{1,3}(\.[0-9]{1,3}){3}$'; then
+  echo "Failed to obtain a valid IPv4 address from ipinfo.io" >&2
+  exit 1
+fi
+
 az deployment group create \
   --resource-group storage-test \
   --template-file senario3.bicep \
-  --parameters sourceRdpIp=$SOURCE_IP
+  --parameters sourceRdpIp="$SOURCE_IP"
 ```
 
 デプロイが完了すると、VM が作成され、Storage Account のファイアウォールが有効になります。
