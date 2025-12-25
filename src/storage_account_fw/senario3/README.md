@@ -47,7 +47,7 @@ chmod +x storage-update.sh
 ```
 
 このスクリプトは以下の処理を行います：
-- senario2.bicep にてデプロイされた VM の Public IP アドレスを取得
+- senario3.bicep にてデプロイされた VM の Public IP アドレスを取得
 - Subnet に Storage サービスエンドポイントを追加
 - Storage Account のネットワークルールに VM の Public IP を追加
 
