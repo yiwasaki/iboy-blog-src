@@ -1,4 +1,4 @@
-# シナリオ1: ストレージアカウントと同一リージョン内のVMからのアクセス
+# シナリオ4: ストレージアカウントとペアリージョン以外のリージョンからアクセス
 
 ## 概要
 
@@ -6,7 +6,7 @@
 
 ## デプロイされるリソース
 
-- Windows Server 2022 VM (je-win2022-01)
+- Windows Server 2022 VM (sea-win2022-01)
 - Public IP Address
 - Network Interface
 - Storage Account  - ファイアウォール有効
@@ -28,10 +28,13 @@
 コマンドを実行すると、VM の管理者パスワード、テスト用のストレージアカウント名、テスト時にストレージアカウントの診断データを保存するためのストレージアカウント名を入力するプロンプトが出ますので、それぞれ値を指定してください。
 パスワードはセキュア パラメータとなっているため、入力してもプロンプトの画面上には何も表示されませんが、正しく設定は可能です。
 
+
 ```bash
+SOURCE_IP=$(curl -s ipinfo.io/ip)
 az deployment group create \
   --resource-group storage-test \
-  --template-file senario1.bicep \
+  --template-file senario4.bicep \
+  --parameters sourceRdpIp=$SOURCE_IP
 ```
 
 デプロイが完了すると、VM が作成され、Storage Account のファイアウォールが有効になります。
@@ -44,29 +47,14 @@ chmod +x storage-update.sh
 ```
 
 このスクリプトは以下の処理を行います：
-- senario1.bicep にてデプロイされた VM の Public IP アドレスを取得
+- senario4.bicep にてデプロイされた VM の Public IP アドレスを取得
 - Subnet に Storage サービスエンドポイントを追加
 - Storage Account のネットワークルールに VM の Public IP を追加
 
 
-### 2. エラーの確認
+### 2. 接続性の確認
 
-VM に RDP 接続し、Storage Account へのアクセスを試みてください。ファイアウォールによりアクセスが拒否されることを確認します。
-
-> 補足: VMにログインできない場合は、NSGで自分のアクセス元のグローバルIPからRDP可能なように設定してください
-
-
-### 3. スクリプトの実行
-`resolve-problem.sh` スクリプトを実行して、VM の 紐づいた**サブネット**を Storage Account の許可リストに追加します。
-
-```bash
-chmod +x sresolve-problem.sh
-./resolve-problem.sh
-```
-
-### 4. エラーの解消確認
-
-再度 VM から Storage Account へのアクセスを試み、エラーが解消されていることを確認してください。
+今検証では、最初にデプロイした状態で接続可能なことが想定されますことから、 VM から Storage Account へのアクセスを試み、正しく接続できていることを確認してください。
 
 ## 注意事項
 

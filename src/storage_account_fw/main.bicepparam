@@ -1,4 +1,4 @@
-using './vnet.bicep'
+using './main.bicep'
 
 param locationEastJapan = 'japaneast'
 param locationWestJapan = 'japanwest'

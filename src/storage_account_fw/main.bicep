@@ -34,7 +34,9 @@ param tags object = {
 // East Japan VNet configuration
 var vnetEastJapanAddressSpace = '172.30.0.0/23'
 var subnetTestEastJapan = '172.30.0.0/24'
-var subnetAzureFirewallEastJapan = '172.30.1.0/24'
+// Split firewall network into data plane and management plane (Basic SKU requirement)
+var subnetAzureFirewallEastJapan = '172.30.1.0/26'
+var subnetAzureFirewallManagementEastJapan = '172.30.1.64/26'
 
 // West Japan VNet configuration
 var vnetWestJapanAddressSpace = '172.30.10.0/24'
@@ -74,6 +76,12 @@ resource vnetEastJapan 'Microsoft.Network/virtualNetworks@2024-03-01' = {
         name: 'AzureFirewallSubnet'
         properties: {
           addressPrefix: subnetAzureFirewallEastJapan
+        }
+      }
+      {
+        name: 'AzureFirewallManagementSubnet'
+        properties: {
+          addressPrefix: subnetAzureFirewallManagementEastJapan
         }
       }
     ]
