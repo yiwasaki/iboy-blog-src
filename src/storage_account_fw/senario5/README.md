@@ -34,9 +34,10 @@
 ```bash
 SOURCE_IP=$(curl -s ipinfo.io/ip)
 az deployment group create \
-  --resource-group storage-test \
-  --template-file senario5.bicep \
-  --parameters sourceRdpIp=$SOURCE_IP
+   --name vnet-deployment  \
+   --resource-group storage-test  \
+   --template-file senario5.bicep \
+   --parameters sourceRdpIp=$SOURCE_IP
 ```
 
 デプロイが完了すると、VM が作成され、Storage Account のファイアウォールが有効になります。
