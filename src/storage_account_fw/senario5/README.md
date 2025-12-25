@@ -63,7 +63,7 @@ VM に RDP 接続し、Storage Account へのアクセスを試みてくださ�
 `resolve-problem.sh` スクリプトを実行して、 **AzureFirewallSubnet**を Storage Account の許可リストに追加します。
 
 ```bash
-chmod +x sresolve-problem.sh
+chmod +x resolve-problem.sh
 ./resolve-problem.sh
 ```
 
