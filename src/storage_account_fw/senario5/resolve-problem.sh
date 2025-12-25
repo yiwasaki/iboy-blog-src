@@ -1,4 +1,4 @@
-# /bin/bash
+#!/bin/bash
 # Update Storage Account
 RESOURCE_GROUP="storage-test"
 STORAGE_ACCOUNT="iboystragefwtest100"
