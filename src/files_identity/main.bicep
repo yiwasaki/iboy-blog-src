@@ -355,6 +355,72 @@ resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-0
   }
 }
 
+// Diagnostic Storage Account
+resource diagnosticStorageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: '${storageAccountNameCleaned}diag'
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+  properties: {
+    accessTier: 'Hot'
+    allowBlobPublicAccess: false
+    allowSharedKeyAccess: true
+    minimumTlsVersion: 'TLS1_2'
+    supportsHttpsTrafficOnly: true
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Allow'
+    }
+  }
+}
+
+// File Service Diagnostic Setting
+resource fileServiceDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'file-service-diagnostics'
+  scope: fileService
+  properties: {
+    storageAccountId: storageAccount.id
+    logs: [
+      {
+        category: 'StorageRead'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 30
+        }
+      }
+      {
+        category: 'StorageWrite'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 30
+        }
+      }
+      {
+        category: 'StorageDelete'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 30
+        }
+      }
+    ]
+    metrics: [
+      {
+        category: 'Transaction'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 30
+        }
+      }
+    ]
+  }
+}
+
 // Outputs
 output vmName string = vm.name
 output vmId string = vm.id
@@ -374,3 +440,7 @@ output storageAccountName string = storageAccount.name
 output storageAccountId string = storageAccount.id
 output fileShareName string = fileShare.name
 output fileShareUrl string = '\\\\${storageAccount.name}.file.${environment().suffixes.storage}\\${fileShareName}'
+
+// Diagnostic Storage Outputs
+output diagnosticStorageAccountName string = diagnosticStorageAccount.name
+output diagnosticStorageAccountId string = diagnosticStorageAccount.id
