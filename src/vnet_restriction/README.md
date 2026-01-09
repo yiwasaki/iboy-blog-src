@@ -61,7 +61,7 @@ Home-page: https://www.dnspython.org
 Author:
 Author-email: Bob Halley <halley@dnspython.org>
 License: ISC
-Location: C:\Users\ibuser\AppData\Local\Programs\Python\Python314\Lib\site-packages
+Location: C:\Users\<UserId>\AppData\Local\Programs\Python\Python314\Lib\site-packages
 Requires:
 Required-by:
 PS >
