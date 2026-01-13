@@ -9,10 +9,14 @@ param vnetAddressPrefix string = '10.0.0.0/16'
 param vmSubnetAddressPrefix string = '10.0.1.0/24'
 
 @description('VM管理者ユーザー名')
+@minLength(1)
+@maxLength(20)
 param adminUsername string
 
 @secure()
 @description('VM管理者パスワード')
+@minLength(12)
+@maxLength(123)
 param adminPassword string
 
 // 変数

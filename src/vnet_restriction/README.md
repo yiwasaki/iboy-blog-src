@@ -25,12 +25,11 @@
 # リソースグループの作成
 az group create --name rg-vnet-test --location japaneast
 
-# デプロイ（パスワードはプロンプトで入力）
+# デプロイ（パスワードはデプロイ時に対話的に入力）
 az deployment group create \
   --resource-group rg-vnet-test \
   --template-file main.bicep \
-  --parameters adminUsername=azureuser \
-  --parameters adminPassword='<your-secure-password>'
+  --parameters adminUsername=azureuser
 ```
 
 ### VMへの接続方法
