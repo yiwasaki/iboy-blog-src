@@ -4,6 +4,8 @@ import dns.query
 import dns.rdatatype
 
 def dnspython_udp_fixed_src(where: str, name: str, src_ip: str = None, src_port: int = 5353):
+    print(f"Querying {name} at {where} from src_ip={src_ip}, src_port={src_port}")
+    
     # A レコードの標準クエリを作成
     q = dns.message.make_query(name, dns.rdatatype.A)
     # source_port に固定ポート、source に固定送信元 IP（必要なら）を設定
