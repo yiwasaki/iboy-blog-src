@@ -4,6 +4,21 @@ import dns.query
 import dns.rdatatype
 
 def dnspython_udp_fixed_src(where: str, name: str, src_ip: str = None, src_port: int = 5353):
+    """
+    Send a DNS A-record query over UDP using a fixed source IP address and UDP port.
+
+    This helper is intended to demonstrate Azure VNet port restrictions by forcing the
+    DNS query to originate from a specific source IP/port combination.
+
+    :param where: The target DNS server to query (IP address or hostname).
+    :param name: The DNS name (FQDN) to resolve.
+    :param src_ip: Optional source IP address to bind for the outgoing UDP packet.
+                   If None, the system default routing will determine the source IP.
+    :param src_port: Source UDP port to use for the query. Defaults to 5353.
+    :return: A dns.message.Message instance containing the DNS response.
+    :raises dns.exception.Timeout: If the query does not receive a response within the timeout.
+    :raises dns.exception.DNSException: For other DNS-related errors raised by dnspython.
+    """
     print(f"Querying {name} at {where} from src_ip={src_ip}, src_port={src_port}")
     
     # A レコードの標準クエリを作成
