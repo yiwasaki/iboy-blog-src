@@ -1,0 +1,8 @@
+{
+  "name": "drawio-diagram-forge",
+  "source": "aktsmm-Agent-Skills",
+  "description": "Generate draw.io editable diagrams (.drawio, .drawio.svg) from text, images, or Excel.",
+  "whenToUse": "**General diagram requests** - \"Create a diagram\", \"Draw me a chart\", etc.",
+  "categories": [],
+  "installedAt": "2026-01-17T06:03:06.095Z"
+}
