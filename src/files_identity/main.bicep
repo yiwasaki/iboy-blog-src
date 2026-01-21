@@ -93,7 +93,7 @@ resource fileServiceDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@202
   name: 'file-service-diagnostics'
   scope: fileService
   properties: {
-    storageAccountId: storageAccount.id
+    storageAccountId: diagnosticStorageAccount.id
     logs: [
       {
         category: 'StorageRead'
