@@ -245,13 +245,11 @@ resource bastion 'Microsoft.Network/bastionHosts@2023-11-01' = {
 output vmName string = vm.name
 output vmId string = vm.id
 output privateIpAddress string = nic.properties.ipConfigurations[0].properties.privateIPAddress
-output vmResourceId string = vm.id
 
 // Jumpbox Outputs
 output jumpboxVmName string = jumpboxVm.name
 output jumpboxVmId string = jumpboxVm.id
 output jumpboxPrivateIpAddress string = jumpboxNic.properties.ipConfigurations[0].properties.privateIPAddress
-output jumpboxVmResourceId string = jumpboxVm.id
 
 // Bastion Outputs
 output bastionName string = bastion.name
