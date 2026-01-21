@@ -1,3 +1,5 @@
+#!/bin/bash
+
 TENANT_ID="<Tenant ID>"
 STORAGE_ACCOUNT="<Storage Account Name>"
 
