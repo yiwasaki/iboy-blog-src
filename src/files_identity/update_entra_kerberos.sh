@@ -1,6 +1,5 @@
 #!/bin/bash
 
-TENANT_ID="<Tenant ID>"
 STORAGE_ACCOUNT="<Storage Account Name>"
 
 OID=$(az ad sp list --display-name "[Storage Account] ${STORAGE_ACCOUNT}.file.core.windows.net" --query "[0].id" -o tsv)
