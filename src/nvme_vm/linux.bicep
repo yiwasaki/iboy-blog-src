@@ -12,7 +12,7 @@ param adminUsername string
 @maxLength(123)
 param adminPassword string
 
-@description('NVMe対応の4 vCPU VMサイズ')
+@description('既定の 2 vCPU (NVMe 非対応) VM サイズ')
 param vmSize string = 'Standard_D2s_v4'
 
 @description('VNetのアドレス空間')
