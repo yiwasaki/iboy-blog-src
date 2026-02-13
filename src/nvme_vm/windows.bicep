@@ -73,64 +73,64 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-11-01' = {
 }
 
 resource vm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
-	name: vmName
-	location: location
-	properties: {
-		hardwareProfile: {
-			vmSize: vmSize
-		}
-		osProfile: {
-			computerName: vmName
-			adminUsername: adminUsername
-			adminPassword: adminPassword
-			windowsConfiguration: {
-				enableAutomaticUpdates: true
-				provisionVMAgent: true
-			}
-		}
-		storageProfile: {
-			imageReference: {
-				publisher: 'MicrosoftWindowsServer'
-				offer: 'WindowsServer'
-				sku: '2025-datacenter-g2'
-				version: 'latest'
-			}
-			osDisk: {
-				name: osDiskName
-				createOption: 'FromImage'
-				managedDisk: {
-					storageAccountType: 'StandardSSD_LRS'
-				}
-				caching: 'ReadWrite'
-				deleteOption: 'Delete'
-			}
-		}
-		networkProfile: {
-			networkInterfaces: [
-				{
-					id: nic.id
-					properties: {
-						deleteOption: 'Delete'
-					}
-				}
-			]
-		}
-	}
+  name: vmName
+  location: location
+  properties: {
+    hardwareProfile: {
+      vmSize: vmSize
+    }
+    osProfile: {
+      computerName: vmName
+      adminUsername: adminUsername
+      adminPassword: adminPassword
+      windowsConfiguration: {
+        enableAutomaticUpdates: true
+        provisionVMAgent: true
+      }
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2025-datacenter-g2'
+        version: 'latest'
+      }
+      osDisk: {
+        name: osDiskName
+        createOption: 'FromImage'
+        managedDisk: {
+          storageAccountType: 'StandardSSD_LRS'
+        }
+        caching: 'ReadWrite'
+        deleteOption: 'Delete'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: nic.id
+          properties: {
+            deleteOption: 'Delete'
+          }
+        }
+      ]
+    }
+  }
 }
 
 // Azure Bastion (Developer Tier)
 // Developer Tier では、VNetの参照は必須です
 resource bastion 'Microsoft.Network/bastionHosts@2023-11-01' = {
-	name: bastionName
-	location: location
-	sku: {
-		name: 'Developer'
-	}
-	properties: {
-		virtualNetwork: {
-			id: vnet.id
-		}
-	}
+  name: bastionName
+  location: location
+  sku: {
+    name: 'Developer'
+  }
+  properties: {
+    virtualNetwork: {
+      id: vnet.id
+    }
+  }
 }
 
 output vmId string = vm.id
