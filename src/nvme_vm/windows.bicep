@@ -29,47 +29,47 @@ var osDiskName = '${vmName}-osdisk'
 var bastionName = 'nvme-bastion'
 
 resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
-	name: vnetName
-	location: location
-	properties: {
-		addressSpace: {
-			addressPrefixes: [
-				vnetAddressPrefix
-			]
-		}
-		subnets: [
-			{
-				name: vmSubnetName
-				properties: {
-					addressPrefix: vmSubnetAddressPrefix
-				}
-			}
-		]
-	}
+  name: vnetName
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        vnetAddressPrefix
+      ]
+    }
+    subnets: [
+      {
+        name: vmSubnetName
+        properties: {
+          addressPrefix: vmSubnetAddressPrefix
+        }
+      }
+    ]
+  }
 }
 
 // VMサブネットの参照
 resource vmSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-11-01' existing = {
-	parent: vnet
-	name: vmSubnetName
+  parent: vnet
+  name: vmSubnetName
 }
 
 resource nic 'Microsoft.Network/networkInterfaces@2023-11-01' = {
-	name: nicName
-	location: location
-	properties: {
-		ipConfigurations: [
-			{
-				name: 'ipconfig1'
-				properties: {
-					subnet: {
-						id: vmSubnet.id
-					}
-					privateIPAllocationMethod: 'Dynamic'
-				}
-			}
-		]
-	}
+  name: nicName
+  location: location
+  properties: {
+    ipConfigurations: [
+      {
+        name: 'ipconfig1'
+        properties: {
+          subnet: {
+            id: vmSubnet.id
+          }
+          privateIPAllocationMethod: 'Dynamic'
+        }
+      }
+    ]
+  }
 }
 
 resource vm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
