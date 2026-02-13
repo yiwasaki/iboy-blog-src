@@ -1,6 +1,6 @@
-# NVMe 検証用 Windows VM (Bicep)
+# NVMe 検証用 Windows/Linux VM (Bicep)
 
-NVMe ディスクコントローラ対応の VM を検証するための Windows VM を作成する Bicep テンプレートです。既定の `vmSize` は NVMe 非対応サイズのため、検証対象に合わせて変更してください。
+NVMe ディスクコントローラ対応の VM を検証するための Windows/Linux VM を作成する Bicep テンプレートです。既定の `vmSize` は NVMe 非対応サイズのため、検証対象に合わせて変更してください。
 
 ## 何が作成されるか
 - VNet + VM サブネット
