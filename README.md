@@ -9,6 +9,7 @@ src フォルダ配下に関しては、以下のブログとの関連性があ�
 |[Azure Storage Accountのファイアウォール設定で困ることが多いので設定方法まとめ](https://qiita.com/iboy/items/3257395771a6ba507a1c)|src/storage_account_fw|
 |[Azure VNet の UDP 65330 ポートが使えない制約でトラブルにならないための方法](https://qiita.com/iboy/items/bea1f43187647bd824be)| src/vnet_restriction|
 |[Azure Files のクラウド専用 ID による ID ベース認証を試してみる](https://qiita.com/iboy/items/5d35dfbb031753dfb5b2)| src/files_identity|
+|[NVMe ディスクコントローラーを利用したAzure VMサイズへのサイズ変更は多くの制限がある](https://qiita.com/iboy/items/12f8cd96036c4ef755ad)| src/nvme_vm|
 
 # 免責事項について
 本リポジトリ内のソースコードに関しては、すべて検証用途のソースコードとなっており、セキュリティ設定等で、一部脆弱な設定等が残っている可能性があります。
