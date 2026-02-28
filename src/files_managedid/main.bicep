@@ -5,11 +5,13 @@
 param location string = 'japaneast'
 
 @description('リソース名のプレフィックス')
+@maxLength(7)
 param resourcePrefix string = 'filesmi'
 
 // 変数定義
-var storageAccountName = '${resourcePrefix}st${uniqueString(resourceGroup().id)}'
-var diagStorageAccountName = '${resourcePrefix}diag${uniqueString(resourceGroup().id)}'
+var sanitizedResourcePrefix = take(replace(toLower(resourcePrefix), '-', ''), 7)
+var storageAccountName = '${sanitizedResourcePrefix}st${uniqueString(resourceGroup().id)}'
+var diagStorageAccountName = '${sanitizedResourcePrefix}diag${uniqueString(resourceGroup().id)}'
 var fileShareName = 'share01'
 
 // Storage Account (SMBOAuth 有効化)
