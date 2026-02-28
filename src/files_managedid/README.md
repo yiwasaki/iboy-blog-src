@@ -29,8 +29,8 @@ Azure Files では、プレビュー機能として、マネージドID を使�
 - **Bastion**: Developer SKU（コスト最適化）
 
 ### RBAC
-- VM のマネージドID に **Storage File Data Privileged Contributor** ロールを付与
-  - ストレージアカウント全体へのフルアクセス権限
+- VM のマネージドID に **Storage File Data SMB MI Admin** ロールを付与
+  - 対象ストレージアカウントの Azure Files (SMB) に対する管理権限（ファイル共有およびデータの作成・更新・削除など）
 
 ## デプロイ方法
 
