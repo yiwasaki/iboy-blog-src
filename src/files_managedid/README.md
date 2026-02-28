@@ -46,21 +46,17 @@ az group create \
   --name rg-files-managedid-test \
   --location japaneast
 
-# デプロイの実行
+# 共通リソース (ストレージアカウントなど) のデプロイ (main.bicep)
 az deployment group create \
   --resource-group rg-files-managedid-test \
-  --template-file main.bicep \
-  --parameters adminPassword='<強力なパスワード>'
-```
+  --template-file main.bicep
 
-### パラメータ
-
-| パラメータ名 | 説明 | デフォルト値 | 必須 |
-|------------|------|------------|------|
-| location | リソースのデプロイ先リージョン | japaneast | いいえ |
-| resourcePrefix | リソース名のプレフィックス | filesmi | いいえ |
-| adminUsername | VM の管理者ユーザー名 | azureuser | いいえ |
-| adminPassword | VM の管理者パスワード | - | はい |
+# VM のデプロイ (vm.bicep)
+az deployment group create \
+  --resource-group rg-files-managedid-test \
+  --template-file vm.bicep \
+  --parameters adminPassword='<強力なパスワード>' \
+               storageAccountName='<main.bicep の出力 storageAccountName>'
 
 ## 検証手順
 
