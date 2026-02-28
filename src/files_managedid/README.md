@@ -25,8 +25,7 @@ Azure Files では、プレビュー機能として、マネージドID を使�
 ### ネットワーク
 - **仮想ネットワーク**: 10.0.0.0/16
   - VM サブネット: 10.0.1.0/24
-  - Bastion サブネット: 10.0.2.0/26
-- **Bastion**: Developer SKU（コスト最適化）
+- **Bastion**: Developer SKU（仮想ネットワーク参照のみで動作し、BastionSubnet は作成されません）
 
 ### RBAC
 - VM のマネージドID に **Storage File Data SMB MI Admin** ロールを付与
