@@ -56,6 +56,7 @@ az deployment group create \
   --template-file vm.bicep \
   --parameters adminPassword='<強力なパスワード>' \
                storageAccountName='<main.bicep の出力 storageAccountName>'
+```
 
 ## 検証手順
 
