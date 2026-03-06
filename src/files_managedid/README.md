@@ -68,7 +68,25 @@ Azure Portal から Bastion を使用して VM に接続します。
 
 ### 2. PowerShell でファイル共有をマウント
 
-VM 上で以下の PowerShell コマンドを実行します：
+VM 上で以下のPowerShell コマンドを実行して、マネージドID の資格情報を更新します。
+
+```powershell
+# ストレージアカウント名を設定
+$storageAccountName = "<デプロイ時の出力から取得>"
+
+# Azure Files SMB マネージドIDクライアント PowerShell モジュールのインストール
+Install-Module AzFilesSmbMIClient 
+Import-Module AzFilesSmbMIClient 
+# PowerShell 実行ポリシーの変更
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# マネージドID の資格情報を更新
+AzFilesSmbMIClient.exe refresh --uri https://$storageAccountName.file.core.windows.net/
+```
+
+>TIPS: `AzFilesSmbMIClient.exe` の引数として refresh を指定しています。この場合、プロセスが動き続けて、一定期間(1日) 毎に、自動で資格情報が更新されるようになります。
+>一度だけ検証用に使いたい場合は set の引数を指定すると、手動で更新し可能です。ただし、この場合は、資格情報の有効期限が切れるとアクセスできなくなることが想定されるため、注意が必要です。
+
+その後、ストレージアカウントのマウントに関しては、VM 上で以下の PowerShell コマンドを実行します：
 
 ```powershell
 # ストレージアカウント名とファイル共有名を設定
