@@ -76,8 +76,7 @@ az group create \
 # パスワードは対話入力（@secure() パラメータのため自動でプロンプトが表示されます）
 az deployment group create \
   --resource-group rg-vcore-lab \
-  --template-file infra/main.bicep \
-
+  --template-file infra/main.bicep
 ```
 
 **デプロイ後の状態**:
@@ -160,7 +159,7 @@ Get-WmiObject -Class Win32_Processor |
 
 | 設定 | NumberOfCores | NumberOfLogicalProcessors |
 |------|:---:|:---:|
-| 制限なし（4 vCPU） | 2 | 8 |
+| 制限なし（8 vCPU） | 4 | 8 |
 | 制限あり（2 vCPU, SMT 無効） | 2 | 2 |
 
 ---
