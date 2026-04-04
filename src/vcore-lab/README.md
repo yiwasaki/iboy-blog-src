@@ -24,7 +24,6 @@
 vcore-lab/
 ├── infra/
 │   ├── main.bicep                    # メインテンプレート
-│   ├── main.bicepparam               # パラメータ（vCore 制約付き）
 │   └── modules/
 │       ├── network.bicep             # VNet / Subnet / NSG
 │       ├── vm.bicep                  # Windows VM（vCore 制御）
@@ -161,7 +160,7 @@ Get-WmiObject -Class Win32_Processor |
 
 | 設定 | NumberOfCores | NumberOfLogicalProcessors |
 |------|:---:|:---:|
-| 制限なし（4 vCPU） | 2 | 4 |
+| 制限なし（4 vCPU） | 2 | 8 |
 | 制限あり（2 vCPU, SMT 無効） | 2 | 2 |
 
 ---

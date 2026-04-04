@@ -65,7 +65,6 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-11-01' = {
 
 // ============================================================
 // Virtual Machine
-// vmSizeProperties は enableVcoreConstraint フラグで条件付き設定
 // API バージョン 2021-07-01 以降が vmSizeProperties をサポート
 // ============================================================
 resource vm 'Microsoft.Compute/virtualMachines@2024-03-01' = {

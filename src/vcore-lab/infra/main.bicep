@@ -3,10 +3,10 @@
 // VM vCore Customization Feature 検証環境
 //
 // 使用方法:
-//   az deployment group create -g <rg> -f main.bicep -p main.bicepparam
+//   az deployment group create -g <rg> -f main.bicep
 //
 //   # パスワードをコマンドラインで指定する場合
-//   az deployment group create -g <rg> -f main.bicep -p main.bicepparam adminPassword='<password>'
+//   az deployment group create -g <rg> -f main.bicep -p adminPassword='<password>'
 //
 // ⚠️ デプロイ後の vCore 設定変更は az vm update で実施してください
 // ============================================================

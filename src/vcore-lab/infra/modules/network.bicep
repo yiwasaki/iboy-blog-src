@@ -24,7 +24,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2023-11-01' = {
   properties: {
     securityRules: [
       {
-        // Bastion からの RDP 接続のみ許可
+        // Bastion から RDP 接続可能なように VNet からの RDP トラフィックを許可
         name: 'Allow-RDP-from-Bastion'
         properties: {
           priority: 100

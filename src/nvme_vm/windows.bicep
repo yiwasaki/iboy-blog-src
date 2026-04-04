@@ -23,7 +23,7 @@ param vmSubnetAddressPrefix string = '10.10.1.0/24'
 
 var vnetName = 'nvme-vnet'
 var vmSubnetName = 'vm-subnet'
-var vmName = 'nvme-win2022-vm'
+var vmName = 'nvme-win2025-vm'
 var nicName = '${vmName}-nic'
 var osDiskName = '${vmName}-osdisk'
 var bastionName = 'nvme-bastion'
