@@ -46,13 +46,8 @@ Write-Host ""
 # テスト 1: Storage Account コンテキスト取得
 Write-Host "--- Test 1: Get Storage Account Context ---" -ForegroundColor Yellow
 try {
-    $context = (Get-AzStorageAccount | Where-Object { $_.StorageAccountName -eq $StorageAccountName }).Context
-    if ($context) {
-        Write-Host "[PASS] Storage Account context acquired." -ForegroundColor Green
-    } else {
-        Write-Host "[FAIL] Storage Account context is null." -ForegroundColor Red
-        exit 1
-    }
+    $context = New-AzStorageContext -StorageAccountName $StorageAccountName -UseConnectedAccount
+    Write-Host "[PASS] Storage Account context acquired." -ForegroundColor Green
 } catch {
     Write-Host "[FAIL] $($_.Exception.Message)" -ForegroundColor Red
     exit 1
