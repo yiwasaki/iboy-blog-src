@@ -21,7 +21,7 @@ param(
     [string]$TestBlobName = "nsp-test-blob.txt"
 )
 
-$ErrorActionPreference = "Continue"
+$ErrorActionPreference = "Stop"
 
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host " Storage Account NSP Access Test" -ForegroundColor Cyan
