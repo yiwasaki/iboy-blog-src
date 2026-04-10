@@ -58,7 +58,6 @@ az deployment group create \
   --name nsp-lab-deployment \
   --resource-group rg-storage-nsp \
   --template-file main.bicep \
-  --parameters main.bicepparam
 ```
 
 ### 4. デプロイ確認 (What-If)
@@ -67,7 +66,6 @@ az deployment group create \
 az deployment group what-if \
   --resource-group rg-storage-nsp \
   --template-file main.bicep \
-  --parameters main.bicepparam
 ```
 
 ## 検証シナリオ
