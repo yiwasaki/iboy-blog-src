@@ -100,8 +100,8 @@ Connect-AzAccount
 ./scripts/switch-nsp-mode.sh \
   -g rg-storage-nsp \
   -n nsp-lab-nsp \
-  -a nsp-lab-sa-association \
-  -m Learning
+  -p nsp-lab \
+  -m Transition
 ```
 
 ## コスト概算
