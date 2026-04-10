@@ -40,9 +40,9 @@ Storage Account に対する Network Security Perimeter (NSP) の動作を検証
 az group create --name rg-storage-nsp --location japaneast
 ```
 
-### 2. パラメータファイルを編集
+### 2. 必須パラメータを確認
 
-`main.bicepparam` を開き、必須パラメータを環境に合わせて更新してください。
+デプロイ実行時に以下のパラメータの入力を求められます。
 
 | パラメータ | 説明 |
 |-----------|------|
@@ -51,13 +51,15 @@ az group create --name rg-storage-nsp --location japaneast
 | `adminPassword` | VM 管理者パスワード（12 文字以上） |
 | `pairLocation` | ペアリージョン（例: `japanwest`） |
 
+> パラメータファイルを使いたい場合は `main.bicepparam` を編集し、デプロイコマンドに `--parameters main.bicepparam` を追加してください。
+
 ### 3. デプロイ実行
 
 ```bash
 az deployment group create \
   --name nsp-lab-deployment \
   --resource-group rg-storage-nsp \
-  --template-file main.bicep \
+  --template-file main.bicep
 ```
 
 ### 4. デプロイ確認 (What-If)
@@ -65,7 +67,7 @@ az deployment group create \
 ```bash
 az deployment group what-if \
   --resource-group rg-storage-nsp \
-  --template-file main.bicep \
+  --template-file main.bicep
 ```
 
 ## 検証シナリオ
@@ -124,7 +126,7 @@ Connect-AzAccount
   -g rg-storage-nsp \
   -n nsp-lab-nsp \
   -p nsp-lab \
-  -m Transition
+  -m Learning
 ```
 
 ## コスト概算
