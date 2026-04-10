@@ -74,7 +74,7 @@ Connect-AzAccount
 ./scripts/switch-nsp-mode.sh \
   -g rg-storage-nsp \
   -n nsp-lab-nsp \
-  -a nsp-lab-sa-association \
+  -p nsp-lab \
   -m Enforced
 ```
 
