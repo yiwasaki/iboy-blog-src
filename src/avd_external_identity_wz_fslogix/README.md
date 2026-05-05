@@ -73,6 +73,7 @@ AVD ゲートウェイ (Azure マネージド)
 
 - Azure CLI バージョン 2.50.0 以降
 - `az bicep` 拡張機能
+- `jq` (post-deploy シェルスクリプトで JSON 操作に使用。Azure Cloud Shell には標準搭載)
 - デプロイ先サブスクリプションへの `Contributor` 権限
 - Entra ID での B2B ゲスト招待権限 (招待する場合)
 - `Cloud Application Administrator` または `Application Administrator` ロール (post-deploy スクリプト実行用)
