@@ -56,7 +56,7 @@ var appGroupName = '${prefix}-dag'
 var workspaceName = '${prefix}-ws'
 
 // セッションホスト VM (computerName は Windows 制限 15 文字以内)
-var sessionHostName = '${prefix}-l2-sh-0'
+var sessionHostName = '${prefix}-sh-0'
 var nicName = '${sessionHostName}-nic'
 var osDiskName = '${sessionHostName}-osdisk'
 

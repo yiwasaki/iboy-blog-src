@@ -2,7 +2,9 @@
 
 ## 概要
 
-[`src/avd_external_identity/`](../avd_external_identity/README.md) (FSLogix なし) をベースに、**FSLogix プロファイル コンテナーを Azure Files (GPv2 / Entra Kerberos) に配置** する構成へ拡張した検証環境です。外部 ID (Entra B2B ゲスト) ユーザーがサインオン時に FSLogix プロファイルをマウントできることを確認することを目的とします。
+Azure Virtual Desktop (AVD) の **外部 ID (Entra B2B ゲスト) シングルセッション** 構成を検証するためのテンプレートです。
+セッションホスト 1 台で、 FSLogix プロファイル コンテナーを Azure Files (GPv2 / Entra Kerberos) に配置する構成を展開します。
+外部 ID (Entra B2B ゲスト) ユーザーがサインオン時に FSLogix プロファイルをマウントできることを確認することを目的とします。
 
 検証コストを最小化するため、以下を採用しています。
 
@@ -132,7 +134,8 @@ Connect-MgGraph -Scopes "Application.Read.All","Application-RemoteDesktopConfig.
 
 $WCLspId = (Get-MgServicePrincipal -Filter "AppId eq '270efc09-cd0d-444b-a71f-39af4910ec45'").Id
 
-If ((Get-MgServicePrincipalRemoteDesktopSecurityConfiguration -ServicePrincipalId $WCLspId) -ne $true) {
+$desktopSecurityConf = Get-MgServicePrincipalRemoteDesktopSecurityConfiguration -ServicePrincipalId $WCLspId
+if ($desktopSecurityConf.IsRemoteDesktopProtocolEnabled -ne $true) {
   Update-MgServicePrincipalRemoteDesktopSecurityConfiguration -ServicePrincipalId $WCLspId -IsRemoteDesktopProtocolEnabled
 }
 ```
