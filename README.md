@@ -13,6 +13,7 @@ src フォルダ配下に関しては、以下のブログとの関連性があ�
 |[Azure Files のMicrosoft Entra ID でマネージド ID を利用した認証を試してみる](https://qiita.com/iboy/items/3cc6962b859d06b3a107)| src/files_managedid|
 |[Azure VM の仮想コアのカスタマイズ機能の紹介](https://qiita.com/iboy/items/df8ac098ff70c04a66a3)| src/vcore-lab|
 |[Azure Storage Account の Network Security Perimeter を理解する](https://qiita.com/iboy/items/c684a74b68ddd5d6272e)| src/storage_nsp|
+|[Enterprise 利用で組織外部の人とコラボレーションをする方法を考える(外部 ID で AVD 利用編)](https://qiita.com/iboy/items/4e1593282d497ea28abb)| src/avd_external_identity_wz_fslogix|
 
 
 # 免責事項について
