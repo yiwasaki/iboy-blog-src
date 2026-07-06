@@ -11,14 +11,6 @@
 
 set -euo pipefail
 
-# 依存コマンドの確認
-for cmd in az jq; do
-  if ! command -v "${cmd}" &>/dev/null; then
-    echo "Error: '${cmd}' is required but not found. Please install it and retry." >&2
-    exit 1
-  fi
-done
-
 usage() {
   cat <<EOF
 Usage: $0 -s <storageAccountName>
@@ -57,8 +49,5 @@ if echo "${EXISTING_TAGS}" | grep -q "kdc_enable_cloud_group_sids"; then
   exit 0
 fi
 
-# 既存タグを取得し、kdc_enable_cloud_group_sids を追加 (既存タグは保持)
-MERGED_TAGS=$(echo "${EXISTING_TAGS}" | jq '. + ["kdc_enable_cloud_group_sids"] | unique')
-
-az ad app update --id "${APP_ID}" --set "tags=${MERGED_TAGS}" --output none
+az ad app update --id "${APP_ID}" --set tags='["kdc_enable_cloud_group_sids"]' --output none
 echo "Tag 'kdc_enable_cloud_group_sids' added to ${STORAGE_ACCOUNT} (appId: ${APP_ID})"

@@ -2,9 +2,7 @@
 
 ## 概要
 
-Azure Virtual Desktop (AVD) の **外部 ID (Entra B2B ゲスト) シングルセッション** 構成を検証するためのテンプレートです。
-セッションホスト 1 台で、 FSLogix プロファイル コンテナーを Azure Files (GPv2 / Entra Kerberos) に配置する構成を展開します。
-外部 ID (Entra B2B ゲスト) ユーザーがサインオン時に FSLogix プロファイルをマウントできることを確認することを目的とします。
+[`src/avd_external_identity/`](../avd_external_identity/README.md) (FSLogix なし) をベースに、**FSLogix プロファイル コンテナーを Azure Files (GPv2 / Entra Kerberos) に配置** する構成へ拡張した検証環境です。外部 ID (Entra B2B ゲスト) ユーザーがサインオン時に FSLogix プロファイルをマウントできることを確認することを目的とします。
 
 検証コストを最小化するため、以下を採用しています。
 
@@ -73,10 +71,12 @@ AVD ゲートウェイ (Azure マネージド)
 
 - Azure CLI バージョン 2.50.0 以降
 - `az bicep` 拡張機能
-- `jq` (post-deploy シェルスクリプトで JSON 操作に使用。Azure Cloud Shell には標準搭載)
 - デプロイ先サブスクリプションへの `Contributor` 権限
 - Entra ID での B2B ゲスト招待権限 (招待する場合)
 - `Cloud Application Administrator` または `Application Administrator` ロール (post-deploy スクリプト実行用)
+- VM 管理者パスワードを格納した **既存の Azure Key Vault** (別リソースグループでも可)
+  - シークレット名: `vm-admin-password` (値: 12 文字以上、英大文字・英小文字・数字・記号を含む)
+  - デプロイ実行ユーザーに Key Vault の `Key Vault Secrets User` 以上の RBAC ロールが付与されていること
 
 ## デプロイ手順
 
@@ -92,14 +92,17 @@ az group create \
 # 3. Bicep のビルド確認 (任意)
 az bicep build --file main.bicep
 
-# 4. デプロイ実行
+# 4. main.bicepparam の Key Vault 参照を設定
+# main.bicepparam を開き、vmAdminPassword の getSecret() 引数を実環境の値に書き換える:
+#   getSecret('<サブスクリプション ID>', '<Key Vault の RG 名>', '<Key Vault 名>', 'vm-admin-password')
+
+# 5. デプロイ実行
 az deployment group create \
   --resource-group rg-avd-fslogix-lab \
   --template-file main.bicep \
-  --parameters main.bicepparam \
-  --parameters vmAdminPassword='<任意の強力なパスワード>'
+  --parameters main.bicepparam
 
-# 5. Storage Account 名を控える (post-deploy スクリプトで使用)
+# 6. Storage Account 名を控える (post-deploy スクリプトで使用)
 STORAGE_ACCOUNT=$(az deployment group show \
   --resource-group rg-avd-fslogix-lab \
   --name main \
@@ -107,7 +110,7 @@ STORAGE_ACCOUNT=$(az deployment group show \
 echo "Storage Account: ${STORAGE_ACCOUNT}"
 ```
 
-> **注意**: `vmAdminPassword` は `main.bicepparam` のプレースホルダのまま実行しないでください。コマンドラインで上書き指定するか、パラメータ ファイルを編集してください。
+> **注意**: デプロイ前に `main.bicepparam` の `vmAdminPassword = getSecret(...)` の引数 4 つ (サブスクリプション ID・Key Vault RG 名・Key Vault 名・シークレット名) を実環境の値に書き換えてください。プレースホルダのまま実行するとデプロイが失敗します。
 
 ## デプロイ後の必須設定
 
@@ -151,7 +154,7 @@ az ad invitation create \
   --invite-redirect-url "https://myapps.microsoft.com"
 ```
 
-### 2. RBAC ロール付与
+### 2. アプリケーショングループへの登録とRBAC ロール付与
 
 | ロール | 対象 | 用途 |
 |---|---|---|
@@ -163,17 +166,19 @@ GUEST_OBJ_ID=$(az ad user show \
   --id "guest_externaltenantcom#EXT#@<リソーステナントドメイン>" \
   --query id -o tsv)
 
-# AVD アプリケーション グループへ
+# AVD アプリケーション グループへの登録
 APP_GROUP_ID=$(az desktopvirtualization applicationgroup show \
   --resource-group rg-avd-fslogix-lab \
   --name avdfsl-dag \
   --query id -o tsv)
+
+# AVD アプリケーション グループへのRBACの設定
 az role assignment create \
   --role "Desktop Virtualization User" \
   --assignee "$GUEST_OBJ_ID" \
   --scope "$APP_GROUP_ID"
 
-# VM へ
+# VM へのRBACの設定
 VM_ID=$(az vm show \
   --resource-group rg-avd-fslogix-lab \
   --name avdfsl-sh-0 \
@@ -185,7 +190,8 @@ az role assignment create \
 ```
 
 > **補足**: 本テンプレートでは Storage Account の `defaultSharePermission` を `StorageFileDataSmbShareElevatedContributor` に設定しているため、SMB レベルでの個別 RBAC 付与は不要です。
-> クラウド専用 ID (Entra Kerberos preview) の制約により、本構成では **個別ユーザー / グループへの共有レベル RBAC 割り当てはサポートされません**。`defaultSharePermission` による全認証 ID 一律設定のみが利用可能です ([Enable Microsoft Entra Kerberos authentication for hybrid and cloud-only identities (preview)](https://learn.microsoft.com/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable))。
+> クラウド専用 ID に対する個別ユーザー / グループへの共有レベル RBAC 割り当ては、**対応リージョンでのみ利用可能**です (Japan East は SSD/Premium 限定)。対応リージョンは公式ドキュメントを参照してください ([Microsoft Entra Kerberos authentication for Azure Files](https://learn.microsoft.com/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable#regional-availability-for-microsoft-entra-kerberos))。本構成 (Standard_LRS / Japan East) では `defaultSharePermission` による一律設定を採用しています。
+
 
 ## パラメータ表
 
@@ -194,11 +200,12 @@ az role assignment create \
 | `location` | string | `japaneast` | - | リソースのデプロイ先リージョン |
 | `resourcePrefix` | string | `avdfsl` | - | リソース名のプレフィックス (最大 8 文字) |
 | `vmAdminUsername` | string | `avdadmin` | - | VM 管理者ユーザー名 |
-| `vmAdminPassword` | securestring | - | ✅ | VM 管理者パスワード (最低 12 文字) |
+| `vmAdminPassword` | securestring | - | ✅ | VM 管理者パスワード。`main.bicepparam` の `getSecret()` で既存 Key Vault から取得 |
 | `profileStorageAccountName` | string | `fsl<unique>` | - | プロファイル用 Storage Account 名 (グローバル一意) |
 | `profileShareName` | string | `profiles` | - | プロファイル用ファイル共有名 |
 | `profileShareQuotaGiB` | int | `100` | - | ファイル共有クォータ (GiB) |
 | `tokenExpirationTime` | string | `utcNow + 2h` | - | ホストプール登録トークン有効期限 |
+| `diagStorageAccountName` | string | `diag<unique>` | - | 診断ログ用 Storage Account 名 (グローバル一意) |
 
 ## デプロイ後検証手順
 
@@ -248,9 +255,9 @@ Get-WinEvent -LogName "Microsoft-FSLogix-Apps/Operational" -MaxEvents 20
 
 #### クラウド専用 ID 構成での ACL 設定ツールの制約
 
-クラウド専用 ID (Entra Kerberos preview) では、ACL 設定に利用できるツールが限定されています ([Configure directory-level and file-level permissions for Azure file shares](https://learn.microsoft.com/azure/storage/files/storage-files-identity-configure-file-level-permissions))。
+クラウド専用 ID (Entra Kerberos) では、ACL 設定に利用できるツールが限定されています ([Configure directory-level and file-level permissions for Azure file shares](https://learn.microsoft.com/azure/storage/files/storage-files-identity-configure-file-level-permissions))。
 
-| ツール | クラウド専用 ID (preview) で利用可能か |
+| ツール | クラウド専用 ID で利用可能か |
 |---|---|
 | Windows File Explorer | ⛔ 不可 |
 | `icacls` | ⛔ 不可 |

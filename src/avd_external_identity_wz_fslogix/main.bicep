@@ -74,13 +74,19 @@ var profileShareUnc = '\\\\${profileStorageAccountName}.file.${environment().suf
 var fslogixConfigScript = join(
   [
     '$ErrorActionPreference = \'Stop\''
+    // FSLogix プロファイル レジストリ設定
     '$profilesKey = \'HKLM:\\SOFTWARE\\FSLogix\\Profiles\''
     'if (-not (Test-Path $profilesKey)) { New-Item -Path $profilesKey -Force | Out-Null }'
     'New-ItemProperty -Path $profilesKey -Name \'Enabled\' -PropertyType DWord -Value 1 -Force | Out-Null'
     'New-ItemProperty -Path $profilesKey -Name \'VHDLocations\' -PropertyType MultiString -Value @(\'${profileShareUnc}\') -Force | Out-Null'
     'New-ItemProperty -Path $profilesKey -Name \'DeleteLocalProfileWhenVHDShouldApply\' -PropertyType DWord -Value 1 -Force | Out-Null'
     'New-ItemProperty -Path $profilesKey -Name \'FlipFlopProfileDirectoryName\' -PropertyType DWord -Value 1 -Force | Out-Null'
+    'New-ItemProperty -Path $profilesKey -Name \'LockedRetryCount\' -PropertyType DWord -Value 3 -Force | Out-Null'
+    'New-ItemProperty -Path $profilesKey -Name \'LockedRetryInterval\' -PropertyType DWord -Value 15 -Force | Out-Null'
+    'New-ItemProperty -Path $profilesKey -Name \'ReAttachIntervalSeconds\' -PropertyType DWord -Value 15 -Force | Out-Null'
+    'New-ItemProperty -Path $profilesKey -Name \'ReAttachRetryCount\' -PropertyType DWord -Value 3 -Force | Out-Null'
     'New-ItemProperty -Path $profilesKey -Name \'VolumeType\' -PropertyType String -Value \'VHDX\' -Force | Out-Null'
+    // Azure Files (Entra Kerberos) クラウド チケット取得設定
     '$kerberosKey = \'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\Kerberos\\Parameters\''
     'if (-not (Test-Path $kerberosKey)) { New-Item -Path $kerberosKey -Force | Out-Null }'
     'New-ItemProperty -Path $kerberosKey -Name \'CloudKerberosTicketRetrievalEnabled\' -PropertyType DWord -Value 1 -Force | Out-Null'
