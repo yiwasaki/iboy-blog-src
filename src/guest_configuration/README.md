@@ -210,14 +210,13 @@ az bicep build-params --file main.bicepparam --outfile .bicep-build/main.paramet
 rm -rf .bicep-build
 ```
 
-2. Assignment の状態を確認します（`<vm-name>` を実際の VM 名に置き換え）。
+2. Assignment の状態を確認します（`<vm-name>` を実際の VM 名に置き換え）。Guest Configuration Assignment は VM（`Microsoft.Compute`）とは別のプロバイダー名前空間（`Microsoft.GuestConfiguration`）にまたがる拡張リソースのため、`az resource show --resource-type ... --name ...` では正しい ID を組み立てられず `Not Found` になります。VM のリソース ID を取得してから配下のパスを組み立てて `--ids` で指定してください。
 
 ```bash
+vm_id="$(az vm show -g rg-gc-sample -n <vm-name> --query id -o tsv)"
+
 az resource show \
-  --resource-group rg-gc-sample \
-  --resource-type 'Microsoft.GuestConfiguration/guestConfigurationAssignments' \
-  --name '<vm-name>/Microsoft.GuestConfiguration/MyServiceConfig' \
-  --api-version 2024-04-05 \
+  --ids "${vm_id}/providers/Microsoft.GuestConfiguration/guestConfigurationAssignments/MyServiceConfig" \
   --query '{provisioningState:properties.provisioningState, complianceStatus:properties.complianceStatus}'
 ```
 
@@ -256,7 +255,6 @@ sudo pwsh ./sample-configuration/scripts/test-package-locally.ps1 \
   - Windows 側の PowerShell にインストール済みでも、WSL の `/usr/bin/pwsh` からは参照されません。WSL 側で上記コマンドを実行してください。
 - Guest Assignment が `NonCompliant` のまま
   - VM 上で `/var/lib/GuestConfig/gc_agent_logs/gc_agent.log` と Assignment report の `reasons` を確認し、パッケージ取得または DSC 実行のエラーを確認します（`MyServiceConfig.psm1` の `Get()` が返す `Reasons` に、`InvalidTargetPath` / `FileMissing` / `Compliant` などのコードが積まれます）
-  - Assignment の評価中は `az vm run-command invoke` の連続実行を避ける。VM の goal state 更新に伴う Extension の再-enable で、実行中の consistency が中断される場合がある
 - Blob アップロードに失敗
   - `az storage account show -g <rg> -n <storage-account-name> --query '{publicNetworkAccess:publicNetworkAccess,ipRules:networkRuleSet.ipRules}'` で許可状態を確認
   - 操作者に対象コンテナーへの `Storage Blob Data Contributor` 権限があることを確認
