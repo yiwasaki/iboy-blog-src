@@ -1,0 +1,9 @@
+# build-package.ps1 が生成する MOF コンパイル出力
+configuration/*/localhost.mof
+configuration/*/*.mof
+
+# 生成される package（必要に応じてコミット対象にする場合はこの行を消す）
+package/*.zip
+
+# build-package.ps1 が使う一時ディレクトリ
+.bicep-build/

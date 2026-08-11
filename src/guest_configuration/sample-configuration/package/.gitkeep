@@ -1,0 +1,1 @@
+build-package.ps1 / build-package.sh の出力先。生成される .zip は .gitignore で除外している。

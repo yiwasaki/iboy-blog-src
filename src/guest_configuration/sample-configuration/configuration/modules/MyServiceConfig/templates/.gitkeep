@@ -1,0 +1,4 @@
+このディレクトリには、DSC resource が実際に読み込む設定テンプレートや静的ファイルを置く。
+New-GuestConfigurationPackage は module folder（MyServiceConfig/ 配下）をまるごと ZIP に含めるため、
+FilesToInclude を使わずここに置くだけで package に同梱される。
+resource コード（MyServiceConfig.psm1）側で明示的に読み込まない限り、実行結果には影響しない。
